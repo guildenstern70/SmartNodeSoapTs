@@ -1,6 +1,6 @@
-import { Greeter } from '../src/greeter';
+import { Server } from '../src/server';
 
 test('Should greet with message', () => {
-  const greeter = new Greeter('friend');
-  expect(greeter.greet()).toBe('Bonjour, friend!');
+    const greeter = new Server('friend');
+    expect(greeter.greet()).toBe('Bonjour, friend!');
 });
