@@ -2,11 +2,12 @@ import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as logger from 'morgan';
 import * as path from 'path';
+import * as xmlparser from 'express-xml-bodyparser';
 
 import errorHandler = require('errorhandler');
 
 // Controllers (Route Handlers)
-import * as helloworldController from "./api/helloworld";
+import * as helloworldController from './api/helloworld';
 
 /**
  * The server.
@@ -14,7 +15,6 @@ import * as helloworldController from "./api/helloworld";
  * @class Server
  */
 export class Server {
-
     /**
      * Bootstrap the application.
      *
@@ -29,7 +29,6 @@ export class Server {
 
     public app: express.Application;
 
-
     /**
      * Constructor.
      *
@@ -37,7 +36,6 @@ export class Server {
      * @constructor
      */
     constructor() {
-
         console.log('Welcome to SmartNodeSoapTs v.0.0.1');
 
         // create expressjs application
@@ -46,10 +44,7 @@ export class Server {
         // configure application
         this.config();
 
-        // add routes
-        this.routes();
-
-        // add api
+        // add SOAP WSes
         this.api();
     }
 
@@ -60,7 +55,8 @@ export class Server {
      * @method api
      */
     public api() {
-        this.app.get("/helloworld", helloworldController.wsdl);
+        this.app.get('/helloworld', helloworldController.wsdl);
+        this.app.post('/helloworld', helloworldController.soapHelloWorld);
     }
 
     /**
@@ -79,6 +75,9 @@ export class Server {
         // use json form parser middlware
         this.app.use(bodyParser.json());
 
+        // user xml body parser
+        this.app.use(xmlparser());
+
         // use query string parser middlware
         this.app.use(
             bodyParser.urlencoded({
@@ -87,15 +86,17 @@ export class Server {
         );
 
         // catch 404 and forward to error handler
-        this.app.use( (
-            err: any,
-            req: express.Request,
-            res: express.Response,
-            next: express.NextFunction
-        ) => {
-            err.status = 404;
-            next(err);
-        });
+        this.app.use(
+            (
+                err: any,
+                req: express.Request,
+                res: express.Response,
+                next: express.NextFunction
+            ) => {
+                err.status = 404;
+                next(err);
+            }
+        );
 
         // error handling
         this.app.use(errorHandler());

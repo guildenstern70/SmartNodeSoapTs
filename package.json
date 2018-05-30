@@ -36,14 +36,18 @@
         "body-parser": "^1.18.3",
         "errorhandler": "^1.5.0",
         "express": "^4.16.3",
-        "morgan": "^1.9.0"
+        "express-xml-bodyparser": "^0.3.0",
+        "morgan": "^1.9.0",
+        "xml2js": "^0.4.19"
     },
     "devDependencies": {
         "@types/errorhandler": "0.0.32",
         "@types/express": "^4.11.1",
+        "@types/express-xml-bodyparser": "^0.3.0",
         "@types/jest": "^22.0.1",
         "@types/morgan": "^1.7.35",
         "@types/node": "^8.0.0",
+        "@types/xml2js": "^0.4.2",
         "coveralls": "^2.0.0",
         "jest": "^22.0.4",
         "prettier": "^1.5.2",
