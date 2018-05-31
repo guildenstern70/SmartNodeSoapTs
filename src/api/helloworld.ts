@@ -12,6 +12,9 @@ const SERVICE_WSDL: string = path.join(
     '../../public/helloworld.wsdl'
 );
 
+const jsonGet = (p: ReadonlyArray<any>, o: Object) =>
+  p.reduce((xs, x) => (xs && xs[x]) ? xs[x] : null, o);
+
 const JSON_RESPONSE = (result: string) => {
     return {
         'soapenv:Envelope': {
@@ -87,11 +90,9 @@ export let soapHelloWorld = (
     console.log('Convert POST request to usable JSON');
     console.log('XML Received = ' + JSON.stringify(req.body));
     const envelope = req.body["soapenv:envelope"];
-    const serviceData = envelope["soapenv:body"][0];
-    const sayHelloData = serviceData["urn:sayhello"][0];
-    console.log('Body = ' + JSON.stringify(sayHelloData));
-    const serviceObject = sayHelloData["firstname"][0];
-    const firstName = serviceObject["_"];
+    const firstName = jsonGet([ "soapenv:body", 0,
+                                "urn:sayhello", 0,
+                                "firstname", 0, "_"], envelope);
     console.log('First Name = ' + firstName);
     soapResponse(firstName, null, res, next);
 };
